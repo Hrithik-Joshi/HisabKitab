@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="220dp"
+    android:viewportWidth="200"
+    android:viewportHeight="220">
+
+    <!-- Wallet Body -->
+    <path
+        android:strokeWidth="4"
+        android:strokeColor="#1B5E20"
+        android:fillColor="#00000000"
+        android:pathData="M30,60
+                          h140
+                          a12,12 0 0,1 12,12
+                          v76
+                          a12,12 0 0,1 -12,12
+                          h-140
+                          a12,12 0 0,1 -12,-12
+                          v-76
+                          a12,12 0 0,1 12,-12z" />
+
+    <!-- Wallet Flap -->
+    <path
+        android:strokeWidth="4"
+        android:strokeColor="#1B5E20"
+        android:fillColor="#00000000"
+        android:pathData="M140,100
+                          h30
+                          a6,6 0 0,1 6,6
+                          v18
+                          a6,6 0 0,1 -6,6
+                          h-30
+                          a6,6 0 0,1 -6,-6
+                          v-18
+                          a6,6 0 0,1 6,-6z" />
+
+    <!-- Flap Dot -->
+    <path
+        android:fillColor="#1B5E20"
+        android:pathData="M155,115
+                          m-4,0
+                          a4,4 0 1,0 8,0
+                          a4,4 0 1,0 -8,0" />
+</vector>
