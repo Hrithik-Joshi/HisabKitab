@@ -17,11 +17,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,22 +37,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseUser
 import com.hrithik.hisabkitab.R
 import com.hrithik.hisabkitab.ui.theme.HisabKitabTheme
 import com.hrithik.hisabkitab.ui.theme.interstate_blue_600
 import com.hrithik.hisabkitab.ui.theme.interstate_blue_700
 import com.hrithik.hisabkitab.ui.theme.interstate_white
+import com.hrithik.hisabkitab.util.Resource
+import com.hrithik.hisabkitab.viewmodel.AuthViewModel
 
 @Composable
-fun LoginScreen(onSignUpClick: () -> Unit, onLoginSuccess: () -> Unit) {
+fun LoginScreen(
+    onSignUpClick: () -> Unit,
+    onLoginSuccess: () -> Unit,
+    authViewModel: AuthViewModel
+) {
+    val authResource = authViewModel.loginFlow.collectAsState()
+
     HisabKitabTheme {
         Scaffold(
             content =
                 { padding ->
-                    LoginContent(padding, onLoginSuccess)
+                    LoginContent(padding, onLoginSuccess, authViewModel, authResource)
                 },
             bottomBar = {
                 CreateNewAccountSection(onSignUpClick)
@@ -56,8 +69,14 @@ fun LoginScreen(onSignUpClick: () -> Unit, onLoginSuccess: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginContent(padding: PaddingValues, onLoginSuccess: () -> Unit) {
+fun LoginContent(
+    padding: PaddingValues,
+    onLoginSuccess: () -> Unit,
+    authViewModel: AuthViewModel,
+    authResource: State<Resource<FirebaseUser>?>
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -84,13 +103,13 @@ fun LoginContent(padding: PaddingValues, onLoginSuccess: () -> Unit) {
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var username by remember { mutableStateOf("") }
+                var email by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
 
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text("Username") },
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Email") },
 
                     modifier = Modifier
                         .fillMaxWidth()
@@ -113,7 +132,7 @@ fun LoginContent(padding: PaddingValues, onLoginSuccess: () -> Unit) {
                 )
 
                 Button(
-                    onClick = onLoginSuccess ,
+                    onClick = { authViewModel.loginUser(email, password) },
                     colors = ButtonDefaults.buttonColors(containerColor = interstate_blue_700),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -131,6 +150,43 @@ fun LoginContent(padding: PaddingValues, onLoginSuccess: () -> Unit) {
 
                 }
             }
+        }
+
+        var showErrorDialog by remember { mutableStateOf(false) }
+        var errorMessage by remember { mutableStateOf("") }
+
+        authResource.value?.let {
+            when (it) {
+                is Resource.Failure -> {
+                    showErrorDialog = true
+                    errorMessage = it.exception.message ?: "An error occurred while logging in"
+                }
+
+                Resource.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(alignment = Alignment.Center)
+
+                    )
+                }
+
+                is Resource.Success -> {
+                    LaunchedEffect(Unit) {
+                        onLoginSuccess()
+                    }
+                }
+            }
+        }
+
+        if (showErrorDialog) {
+            ErrorDialog(
+                title = "Login Error",
+                message = errorMessage,
+                onDismiss = {
+                    showErrorDialog = false
+                    authViewModel.resetState()
+                }
+            )
         }
     }
 }
@@ -157,14 +213,4 @@ fun CreateNewAccountSection(onSignUpClick: () -> Unit) {
             color = interstate_blue_700
         )
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewLoginScreen() {
-    LoginScreen(
-        onSignUpClick = {},
-        onLoginSuccess = {}
-    )
 }
