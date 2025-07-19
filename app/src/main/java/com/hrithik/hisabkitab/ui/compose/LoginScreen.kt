@@ -182,7 +182,10 @@ fun LoginContent(
             ErrorDialog(
                 title = "Login Error",
                 message = errorMessage,
-                onDismiss = { showErrorDialog = false }
+                onDismiss = {
+                    showErrorDialog = false
+                    authViewModel.resetState()
+                }
             )
         }
     }

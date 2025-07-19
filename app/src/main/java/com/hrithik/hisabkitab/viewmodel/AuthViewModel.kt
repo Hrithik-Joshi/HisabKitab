@@ -43,8 +43,7 @@ class AuthViewModel @Inject constructor(
         _signupFlow.value = result
     }
 
-    fun logout() {
-        repository.logout()
+    fun resetState() {
         _loginFlow.value = null
         _signupFlow.value = null
     }
