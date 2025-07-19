@@ -14,7 +14,6 @@ import jakarta.inject.Singleton
 object AppModule {
 
     @Provides
-    @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides

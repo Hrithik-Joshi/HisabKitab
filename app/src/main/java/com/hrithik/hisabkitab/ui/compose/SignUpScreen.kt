@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,6 +25,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,17 +40,23 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseUser
 import com.hrithik.hisabkitab.ui.theme.HisabKitabTheme
 import com.hrithik.hisabkitab.ui.theme.interstate_blue_700
 import com.hrithik.hisabkitab.ui.theme.interstate_white
+import com.hrithik.hisabkitab.util.Resource
+import com.hrithik.hisabkitab.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
     onBackClick: () -> Unit,
     onAlreadyHaveAccountClick: () -> Unit,
-    onSignUpSuccess: () -> Unit
+    onSignUpSuccess: () -> Unit,
+    authViewModel: AuthViewModel
 ) {
+    val authResource = authViewModel.signupFlow.collectAsState()
+
     HisabKitabTheme {
         Scaffold(
             topBar = {
@@ -68,7 +78,7 @@ fun SignUpScreen(
                 )
             },
             content = { padding ->
-                SignUpContent(padding, onSignUpSuccess)
+                SignUpContent(padding, onSignUpSuccess, authViewModel, authResource)
             },
             bottomBar = {
                 AlreadyHadAccount(onAlreadyHaveAccountClick)
@@ -78,78 +88,116 @@ fun SignUpScreen(
 }
 
 @Composable
-fun SignUpContent(padding: PaddingValues, onSignUpSuccess: () -> Unit) {
+fun SignUpContent(
+    padding: PaddingValues,
+    onSignUpSuccess: () -> Unit,
+    authViewModel: AuthViewModel,
+    authResource: State<Resource<FirebaseUser>?>
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-    ){
-            Column(
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            var fullName by remember { mutableStateOf("") }
+            var email by remember { mutableStateOf("") }
+            var password by remember { mutableStateOf("") }
+
+            OutlinedTextField(
+                value = fullName,
+                onValueChange = { fullName = it },
+                label = { Text("FullName") },
+
                 modifier = Modifier
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                shape = RoundedCornerShape(16.dp)
+            )
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                shape = RoundedCornerShape(16.dp)
+            )
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Password
+                ),
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                shape = RoundedCornerShape(16.dp)
+            )
+
+            Button(
+                onClick = { authViewModel.signupUser(fullName, email, password) },
+                colors = ButtonDefaults.buttonColors(containerColor = interstate_blue_700),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp)
+                    .height(45.dp)
             ) {
-                var fullName by remember { mutableStateOf("") }
-                var email by remember { mutableStateOf("") }
-                var password by remember { mutableStateOf("") }
-
-                OutlinedTextField(
-                    value = fullName,
-                    onValueChange = { fullName = it },
-                    label = { Text("FullName") },
-
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 10.dp),
-                    shape = RoundedCornerShape(16.dp)
-                )
-
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = { Text("Email") },
-
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 10.dp),
-                    shape = RoundedCornerShape(16.dp)
-                )
-
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Password") },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Password
+                Text(
+                    text = "Sign up",
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
                     ),
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 10.dp),
-                    shape = RoundedCornerShape(16.dp)
+                    color = interstate_white
                 )
 
-                Button(
-                    onClick = onSignUpSuccess,
-                    colors = ButtonDefaults.buttonColors(containerColor = interstate_blue_700),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp)
-                        .height(45.dp)
-                ) {
-                    Text(
-                        text = "Sign up",
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        ),
-                        color = interstate_white
-                    )
+            }
+        }
 
+        var showErrorDialog by remember { mutableStateOf(false) }
+        var errorMessage by remember { mutableStateOf("") }
+
+        authResource.value?.let {
+            when (it) {
+                is Resource.Failure -> {
+                    showErrorDialog = true
+                    errorMessage = it.exception.message ?: "An error occurred while registering"
+                }
+
+                Resource.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(alignment = Alignment.Center)
+
+                    )
+                }
+
+                is Resource.Success -> {
+                    LaunchedEffect(Unit) {
+                        onSignUpSuccess()
+                    }
                 }
             }
+        }
 
+        if (showErrorDialog) {
+            ErrorDialog(
+                title = "Registration Error",
+                message = errorMessage,
+                onDismiss = { showErrorDialog = false }
+            )
+        }
     }
 }
 
@@ -159,7 +207,7 @@ fun AlreadyHadAccount(onAlreadyHaveAccountClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 60.dp)
-            .clickable {onAlreadyHaveAccountClick()},
+            .clickable { onAlreadyHaveAccountClick() },
         contentAlignment = Alignment.BottomCenter
     ) {
         Text(
@@ -169,6 +217,6 @@ fun AlreadyHadAccount(onAlreadyHaveAccountClick: () -> Unit) {
             ),
             color = interstate_blue_700,
 
-        )
+            )
     }
 }
