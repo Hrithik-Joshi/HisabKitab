@@ -8,16 +8,16 @@ import androidx.navigation.compose.rememberNavController
 import com.hrithik.hisabkitab.ui.compose.HomeScreen
 import com.hrithik.hisabkitab.ui.compose.LoginScreen
 import com.hrithik.hisabkitab.ui.compose.SignUpScreen
-import com.hrithik.hisabkitab.viewmodel.AuthViewModel
 
 @Composable
 fun HisabKitabNavigation(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    startDestination: String
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = NavigationItem.Login.route
+        startDestination = startDestination
     ) {
         composable(NavigationItem.Login.route) {
             LoginScreen(

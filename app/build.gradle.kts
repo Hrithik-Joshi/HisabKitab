@@ -70,6 +70,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // For Encrypted Shared Preference
+    implementation(libs.touchlab.settings.datastore)
+    implementation(libs.android.datastore)
+    implementation(libs.touchlab.settings.coroutines)
+    implementation(libs.bundles.touchlab.common)
+
     //firebase
     implementation(platform(libs.firebase.bom))
 }

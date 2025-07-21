@@ -2,15 +2,19 @@ package com.hrithik.hisabkitab.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.hrithik.hisabkitab.data.dataStore.DataStorageManager
 import com.hrithik.hisabkitab.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val dataStorageManager: DataStorageManager
 ) : ViewModel() {
 
     private val _showBottomSheet = MutableStateFlow(false)
@@ -24,8 +28,9 @@ class HomeViewModel @Inject constructor(
         _showBottomSheet.value = show
     }
 
-    fun signOut() {
+    fun signOut() = viewModelScope.launch{
         repository.logout()
+        dataStorageManager.clearSession()
         _isSignedOut.value = true
     }
 }
