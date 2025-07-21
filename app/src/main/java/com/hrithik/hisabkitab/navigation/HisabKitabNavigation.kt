@@ -8,7 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import com.hrithik.hisabkitab.ui.compose.HomeScreen
 import com.hrithik.hisabkitab.ui.compose.LoginScreen
 import com.hrithik.hisabkitab.ui.compose.SignUpScreen
-import com.hrithik.hisabkitab.viewmodel.AuthViewModel
 
 @Composable
 fun HisabKitabNavigation(
