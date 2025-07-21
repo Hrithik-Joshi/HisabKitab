@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseUser
 import com.hrithik.hisabkitab.ui.theme.HisabKitabTheme
 import com.hrithik.hisabkitab.ui.theme.interstate_blue_700
@@ -53,7 +54,7 @@ fun SignUpScreen(
     onBackClick: () -> Unit,
     onAlreadyHaveAccountClick: () -> Unit,
     onSignUpSuccess: () -> Unit,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val authResource = authViewModel.signupFlow.collectAsState()
 
