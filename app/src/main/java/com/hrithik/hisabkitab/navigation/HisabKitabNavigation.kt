@@ -12,7 +12,6 @@ import com.hrithik.hisabkitab.viewmodel.AuthViewModel
 
 @Composable
 fun HisabKitabNavigation(
-    authViewModel: AuthViewModel,
     navController: NavHostController = rememberNavController()
 ) {
 
@@ -22,7 +21,6 @@ fun HisabKitabNavigation(
     ) {
         composable(NavigationItem.Login.route) {
             LoginScreen(
-                authViewModel = authViewModel,
                 onSignUpClick = {
                     navController.navigate(NavigationItem.SignUp.route)
                 },
@@ -39,7 +37,6 @@ fun HisabKitabNavigation(
 
         composable(NavigationItem.SignUp.route) {
             SignUpScreen(
-                authViewModel = authViewModel,
                 onBackClick = {
                     navController.popBackStack()
                 },
@@ -58,7 +55,15 @@ fun HisabKitabNavigation(
         }
 
         composable(NavigationItem.Home.route) {
-            HomeScreen()
+            HomeScreen(
+                onSignOutClicked = {
+                    navController.navigate(NavigationItem.Login.route) {
+                        popUpTo(NavigationItem.Home.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }
 }
