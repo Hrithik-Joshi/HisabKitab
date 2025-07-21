@@ -11,12 +11,13 @@ import com.hrithik.hisabkitab.ui.compose.SignUpScreen
 
 @Composable
 fun HisabKitabNavigation(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    startDestination: String
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = NavigationItem.Login.route
+        startDestination = startDestination
     ) {
         composable(NavigationItem.Login.route) {
             LoginScreen(
