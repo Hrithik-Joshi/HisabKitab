@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -90,7 +91,7 @@ fun LoginContent(
                 .padding(100.dp)
                 .size(70.dp)
                 .align(Alignment.TopCenter),
-            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(interstate_blue_700)
+            colorFilter = tint(interstate_blue_700)
         )
 
         Box(

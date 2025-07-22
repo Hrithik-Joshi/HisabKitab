@@ -1,19 +1,20 @@
 package com.hrithik.hisabkitab.ui.compose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
@@ -29,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -79,12 +81,12 @@ fun HomeScreen(
                             )
                         )
                     },
-                    actions = {
+                    navigationIcon = {
                         IconButton(
                             onClick = { homeViewModel.showBottomSheet(true) }
                         ) {
                             Image(
-                                imageVector = Icons.Default.KeyboardArrowDown,
+                                imageVector = Icons.Default.Menu,
                                 contentDescription = "Settings Icon",
                                 modifier = Modifier,
                                 colorFilter = ColorFilter.tint(
@@ -98,50 +100,55 @@ fun HomeScreen(
             content = { padding ->
                 Box(
                     modifier = Modifier
-                        .padding(padding)
+                        .padding( padding)
                         .fillMaxSize()
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                        Column(
-                            modifier = Modifier
-                                .padding(top = 16.dp)
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = "Welcome! $userName",
-                                style = MaterialTheme.typography.headlineSmall.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = FontFamily(Font(R.font.lora_regular)),
-                                    fontSize = 20.sp
-                                ),
+
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            CategoryCard(
+                                title = "Expense",
+                                gradient = GradientColor.expenseGradient,
                                 modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
+                                    .weight(1f)
+                                    .padding(8.dp),
+                                amount = "₹1,200",
+                                onClick = onAddExpenseClicked
+                            )
+                            CategoryCard(
+                                title = "Income",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(8.dp),
+                                gradient = GradientColor.incomeGradient,
+                                amount = "₹5,000",
+                                onClick = { /* Navigate */ }
                             )
                         }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp)
-                        ) {
-                            FeatureCard(
-                                title = "Add Expense",
-                                onClick = onAddExpenseClicked,
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            CategoryCard(
+                                title = "Loan",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(8.dp),
+                                gradient = GradientColor.loanGradient,
+                                amount = "₹15,000",
+                                onClick = { /* Navigate */ }
                             )
-
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            FeatureCard(
-                                title = "View Report",
-                                onClick = { },
+                            CategoryCard(
+                                title = "Investment",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(8.dp),
+                                gradient = GradientColor.investmentGradient,
+                                amount = "₹9,000",
+                                onClick = { /* Navigate */ }
                             )
                         }
+
                     }
 
                     if (showBottomSheet) {

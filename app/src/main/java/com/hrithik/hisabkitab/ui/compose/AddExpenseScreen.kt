@@ -1,5 +1,7 @@
 package com.hrithik.hisabkitab.ui.compose
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -54,14 +56,12 @@ fun AddExpenseScreen(onBackClick: () -> Unit) {
                 )
             },
             content = { paddingValues ->
-                // Content of the Add Expense Screen goes here
-                androidx.compose.foundation.layout.Column(
+                Box(
                     modifier = Modifier
                         .padding(paddingValues)
                         .fillMaxSize()
                 ) {
-                    // Add your form fields and buttons here
-                    androidx.compose.material3.Text("Add your expense details here")
+
                 }
             }
         )
