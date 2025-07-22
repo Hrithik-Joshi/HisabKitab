@@ -124,7 +124,7 @@ fun HomeScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp)
+                                .padding(top = 8.dp)
                         ) {
                             FeatureCard(
                                 title = "Add Expense",
