@@ -21,7 +21,7 @@ class GradientColor() {
             listOf(Color(0xFFFFE4C4), Color(0xFFFFCBA4))
         )
         val expenseAdd = Brush.horizontalGradient(
-            listOf(Color(0xFFFBC2EB), Color(0xFFA6C1EE))
+            listOf(Color(0xFFFFEAF5), Color(0xFFFFF5FB))
         )
     }
 }

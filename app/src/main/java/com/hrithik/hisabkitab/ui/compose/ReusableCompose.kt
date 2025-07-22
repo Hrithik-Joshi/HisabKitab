@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.hrithik.hisabkitab.ui.compose.GradientColor.Companion.expenseAdd
 import com.hrithik.hisabkitab.ui.theme.text_charcoal
+import com.hrithik.hisabkitab.ui.theme.text_grey
 
 @Composable
 fun ErrorDialog(
@@ -172,7 +173,7 @@ fun AddExpenseAmountCard(
                 text = "Enter Amount",
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.Black
+                    color = text_grey
                 ),
                 modifier = Modifier.padding(12.dp).align(Alignment.CenterHorizontally),
 
@@ -185,7 +186,7 @@ fun AddExpenseAmountCard(
                     Text(
                         text = "₹ Amount",
                         style = MaterialTheme.typography.titleMedium.copy(
-                            color = Color.Black,
+                            color = text_grey,
                             fontWeight = FontWeight.Light
                         ),
                     )
