@@ -1,7 +1,6 @@
 package com.hrithik.hisabkitab.ui.compose
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
@@ -31,7 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -41,8 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hrithik.hisabkitab.R
 import com.hrithik.hisabkitab.ui.theme.HisabKitabTheme
-import com.hrithik.hisabkitab.ui.theme.interstate_blue_600
-import com.hrithik.hisabkitab.ui.theme.interstate_white
 import com.hrithik.hisabkitab.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +61,7 @@ fun HomeScreen(
                 TopAppBar(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        ,
                     title = {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -79,8 +73,7 @@ fun HomeScreen(
                                     fontWeight = FontWeight.Bold,
                                     fontFamily = FontFamily(Font(R.font.lora_regular)),
                                     fontSize = 24.sp
-                                ),
-                                modifier = Modifier.weight(1f)
+                                )
                             )
                             IconButton(
                                 onClick = { homeViewModel.showBottomSheet(true) }
@@ -89,7 +82,7 @@ fun HomeScreen(
                                     imageVector = Icons.Default.KeyboardArrowDown,
                                     contentDescription = "Settings Icon",
                                     modifier = Modifier,
-                                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                    colorFilter = ColorFilter.tint(
                                         MaterialTheme.colorScheme.onSurface
                                     )
                                 )
@@ -104,60 +97,47 @@ fun HomeScreen(
                         .padding(padding)
                         .fillMaxSize()
                 ) {
-                    Column(modifier = Modifier.fillMaxSize()
-                        .background(interstate_white)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
                         HorizontalDivider(
                             thickness = 1.dp,
                             color = MaterialTheme.colorScheme.outline
                         )
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "Welcome! $userName",
+                                style = MaterialTheme.typography.headlineSmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = FontFamily(Font(R.font.lora_regular)),
+                                    fontSize = 20.sp
+                                ),
+                                modifier = Modifier
+                                    .padding(top = 8.dp)
+                                    .align(Alignment.CenterHorizontally)
+                            )
+                        }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
                         ) {
-                            ElevatedCard(
-                                modifier = Modifier
-                                    .padding(24.dp),
-                                elevation = CardDefaults.cardElevation(
-                                    defaultElevation = 16.dp
-                                ),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = interstate_blue_600,
-                                ),
-                            ) {
-                                Text(
-                                    text = "Add Expense",
-                                    style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 20.sp,
-                                        color = interstate_white
-                                    ),
-                                    modifier = Modifier.padding(16.dp)
-                                )
-                            }
+                            FeatureCard(
+                                title = "Add Expense",
+                                onClick = { },
+                            )
 
                             Spacer(modifier = Modifier.weight(1f))
 
-                            ElevatedCard(
-                                modifier = Modifier
-                                    .padding(24.dp),
-                                elevation = CardDefaults.cardElevation(
-                                    defaultElevation = 16.dp
-                                ),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = interstate_blue_600,
-                                )
-                            ) {
-                                Text(
-                                    text = "View Report",
-                                    style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 20.sp,
-                                        color = interstate_white
-                                    ),
-                                    modifier = Modifier.padding(16.dp)
-                                )
-                            }
+                            FeatureCard(
+                                title = "View Report",
+                                onClick = { },
+                            )
                         }
                     }
 
@@ -174,7 +154,7 @@ fun HomeScreen(
                                     modifier = Modifier
                                         .padding(20.dp)
                                         .size(20.dp),
-                                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                    colorFilter = ColorFilter.tint(
                                         MaterialTheme.colorScheme.onSurface
                                     )
                                 )
@@ -203,7 +183,7 @@ fun HomeScreen(
                                                     false
                                                 )
                                             }),
-                                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                        colorFilter = ColorFilter.tint(
                                             MaterialTheme.colorScheme.onSurface
                                         )
                                     )
@@ -216,7 +196,7 @@ fun HomeScreen(
                                     modifier = Modifier
                                         .padding(20.dp)
                                         .size(20.dp),
-                                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                    colorFilter = ColorFilter.tint(
                                         MaterialTheme.colorScheme.onSurface
                                     )
                                 )
