@@ -107,7 +107,7 @@ fun HomeScreen(
                         )
                         Column(
                             modifier = Modifier
-                                .padding(16.dp)
+                                .padding(top = 16.dp)
                                 .fillMaxWidth()
                         ) {
                             Text(
@@ -118,7 +118,6 @@ fun HomeScreen(
                                     fontSize = 20.sp
                                 ),
                                 modifier = Modifier
-                                    .padding(top = 8.dp)
                                     .align(Alignment.CenterHorizontally)
                             )
                         }
