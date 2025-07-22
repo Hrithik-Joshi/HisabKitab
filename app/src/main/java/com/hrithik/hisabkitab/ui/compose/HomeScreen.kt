@@ -2,6 +2,7 @@ package com.hrithik.hisabkitab.ui.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -43,7 +45,8 @@ import com.hrithik.hisabkitab.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
-    onSignOutClicked: () -> Unit
+    onSignOutClicked: () -> Unit,
+    onAddExpenseClicked: () -> Unit
 ) {
 
     val showBottomSheet by homeViewModel.showBottomSheet.collectAsState()
@@ -60,33 +63,34 @@ fun HomeScreen(
             topBar = {
                 TopAppBar(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        ,
+                        .fillMaxWidth(),
                     title = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
+                        Text(
+                            text = "Hisab Kitab",
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily(Font(R.font.lora_regular)),
+                                fontSize = 24.sp
+                            ),
+                            modifier = Modifier.clickable(
+                                onClick = { homeViewModel.showBottomSheet(true) },
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                            )
+                        )
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = { homeViewModel.showBottomSheet(true) }
                         ) {
-                            Text(
-                                text = "Hisab Kitab",
-                                style = MaterialTheme.typography.headlineMedium.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = FontFamily(Font(R.font.lora_regular)),
-                                    fontSize = 24.sp
+                            Image(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = "Settings Icon",
+                                modifier = Modifier,
+                                colorFilter = ColorFilter.tint(
+                                    MaterialTheme.colorScheme.onSurface
                                 )
                             )
-                            IconButton(
-                                onClick = { homeViewModel.showBottomSheet(true) }
-                            ) {
-                                Image(
-                                    imageVector = Icons.Default.KeyboardArrowDown,
-                                    contentDescription = "Settings Icon",
-                                    modifier = Modifier,
-                                    colorFilter = ColorFilter.tint(
-                                        MaterialTheme.colorScheme.onSurface
-                                    )
-                                )
-                            }
                         }
                     }
                 )
@@ -128,7 +132,7 @@ fun HomeScreen(
                         ) {
                             FeatureCard(
                                 title = "Add Expense",
-                                onClick = { },
+                                onClick = onAddExpenseClicked,
                             )
 
                             Spacer(modifier = Modifier.weight(1f))

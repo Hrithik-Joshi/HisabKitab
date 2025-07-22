@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.hrithik.hisabkitab.ui.compose.AddExpenseScreen
 import com.hrithik.hisabkitab.ui.compose.HomeScreen
 import com.hrithik.hisabkitab.ui.compose.LoginScreen
 import com.hrithik.hisabkitab.ui.compose.SignUpScreen
@@ -62,8 +63,15 @@ fun HisabKitabNavigation(
                             inclusive = true
                         }
                     }
+                },
+                onAddExpenseClicked = {
+                    navController.navigate(NavigationItem.AddExpense.route)
                 }
             )
+        }
+
+        composable (NavigationItem.AddExpense.route) {
+             AddExpenseScreen(onBackClick = { navController.popBackStack() })
         }
     }
 }
