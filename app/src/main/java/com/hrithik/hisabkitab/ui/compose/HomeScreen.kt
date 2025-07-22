@@ -23,6 +23,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,6 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hrithik.hisabkitab.R
 import com.hrithik.hisabkitab.ui.theme.HisabKitabTheme
+import com.hrithik.hisabkitab.ui.theme.interstate_blue_600
+import com.hrithik.hisabkitab.ui.theme.interstate_white
 import com.hrithik.hisabkitab.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,13 +69,15 @@ fun HomeScreen(
                 TopAppBar(
                     modifier = Modifier
                         .fillMaxWidth(),
+                    colors = TopAppBarDefaults.topAppBarColors(interstate_blue_600),
                     title = {
                         Text(
                             text = "Hisab Kitab",
                             style = MaterialTheme.typography.headlineMedium.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = FontFamily(Font(R.font.lora_regular)),
-                                fontSize = 24.sp
+                                fontSize = 24.sp,
+                                color = interstate_white,
                             ),
                             modifier = Modifier.clickable(
                                 onClick = { homeViewModel.showBottomSheet(true) },
@@ -90,7 +95,7 @@ fun HomeScreen(
                                 contentDescription = "Settings Icon",
                                 modifier = Modifier,
                                 colorFilter = ColorFilter.tint(
-                                    MaterialTheme.colorScheme.onSurface
+                                    interstate_white
                                 )
                             )
                         }
@@ -106,6 +111,7 @@ fun HomeScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
+                            .background(interstate_white)
                     ) {
 
                         Row(modifier = Modifier.fillMaxWidth()) {

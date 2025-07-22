@@ -70,8 +70,13 @@ fun HisabKitabNavigation(
             )
         }
 
-        composable (NavigationItem.AddExpense.route) {
-             AddExpenseScreen(onBackClick = { navController.popBackStack() })
+        composable(NavigationItem.AddExpense.route) {
+            AddExpenseScreen(onBackClick = {
+                navController.popBackStack(
+                    NavigationItem.Home,
+                    inclusive = false
+                )
+            })
         }
     }
 }

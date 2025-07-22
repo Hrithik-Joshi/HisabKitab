@@ -12,16 +12,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,11 +30,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.hrithik.hisabkitab.ui.compose.GradientColor.Companion.expenseAdd
+import com.hrithik.hisabkitab.ui.theme.text_charcoal
 
 @Composable
 fun ErrorDialog(
@@ -117,7 +122,7 @@ fun CategoryCard(
                     Text(
                         text = it,
                         style = MaterialTheme.typography.titleLarge,
-                        color = Color.White,
+                        color = text_charcoal,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -139,6 +144,70 @@ fun CategoryCard(
                 )
 
             }
+        }
+    }
+}
+
+@Composable
+fun AddExpenseAmountCard(
+    amount: String,
+    onAmountChange: (String) -> Unit
+) {
+    val focusManager = LocalFocusManager.current
+
+    ElevatedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(expenseAdd),
+
+        ) {
+            Text(
+                text = "Enter Amount",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                ),
+                modifier = Modifier.padding(12.dp).align(Alignment.CenterHorizontally),
+
+            )
+
+            OutlinedTextField(
+                value = amount,
+                onValueChange = onAmountChange,
+                label = {
+                    Text(
+                        text = "₹ Amount",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Light
+                        ),
+                    )
+                },
+                textStyle = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
+                }),
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
+                    .align(Alignment.CenterHorizontally),
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp)
+            )
+
         }
     }
 }

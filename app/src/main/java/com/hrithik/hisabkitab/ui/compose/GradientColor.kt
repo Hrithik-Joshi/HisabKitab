@@ -8,19 +8,20 @@ class GradientColor() {
     companion object {
 
         val expenseGradient = Brush.horizontalGradient(
-            listOf(Color(0xFFbc556f), Color(0xFFf9a470))
+            listOf(
+                Color(0xFFFFD5D5), Color(0xFFFF8C8C))
         )
-
         val incomeGradient = Brush.horizontalGradient(
-            listOf(Color(0xFF5fc52e), Color(0xFF6eee87))
+            listOf(Color(0xFFDFFFD9), Color(0xFF9DFF9C))
         )
         val loanGradient = Brush.horizontalGradient(
-            listOf(Color(0xFF5ab2f7), Color(0xFF12cff3))
+            listOf(Color(0xFFD6F4FF), Color(0xFFA7E2FF))
         )
-
-
         val investmentGradient = Brush.horizontalGradient(
-            listOf(Color(0xFFf4762d), Color(0xFFffd78a))
+            listOf(Color(0xFFFFE4C4), Color(0xFFFFCBA4))
+        )
+        val expenseAdd = Brush.horizontalGradient(
+            listOf(Color(0xFFFBC2EB), Color(0xFFA6C1EE))
         )
     }
 }
