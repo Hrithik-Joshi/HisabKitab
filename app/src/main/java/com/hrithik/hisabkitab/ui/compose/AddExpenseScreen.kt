@@ -149,6 +149,7 @@ fun AddExpenseScreen(onBackClick: () -> Unit) {
                                     keyboardActions = KeyboardActions(onDone = {
                                         focusManager.clearFocus()
                                     }),
+
                                     textStyle = MaterialTheme.typography.bodyMedium,
                                     maxLines = 4,
                                     colors = OutlinedTextFieldDefaults.colors(
@@ -156,7 +157,7 @@ fun AddExpenseScreen(onBackClick: () -> Unit) {
                                         unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
                                     ),
-                                    shape = RoundedCornerShape(8),
+                                    shape = RoundedCornerShape(12.dp),
                                     placeholder = {
                                         Text(
                                             text = "Add any additional notes here",
@@ -219,6 +220,7 @@ fun CategoryDropdown(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
+            shape = RoundedCornerShape(12.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .menuAnchor()
