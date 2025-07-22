@@ -33,4 +33,8 @@ class HomeViewModel @Inject constructor(
         dataStorageManager.clearSession()
         _isSignedOut.value = true
     }
+
+    fun getUserName(): String{
+       return repository.currentUser?.displayName.toString()
+    }
 }
