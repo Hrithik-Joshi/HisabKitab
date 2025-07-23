@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -31,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -51,7 +48,10 @@ import com.hrithik.hisabkitab.viewmodel.HomeViewModel
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     onSignOutClicked: () -> Unit,
-    onAddExpenseClicked: () -> Unit
+    onAddExpenseClicked: () -> Unit,
+    onAddIncomeClicked: () -> Unit,
+    onAddInvestmentClicked: () -> Unit,
+    onAddLoanClicked: () -> Unit
 ) {
 
     val showBottomSheet by homeViewModel.showBottomSheet.collectAsState()
@@ -131,7 +131,7 @@ fun HomeScreen(
                                     .padding(8.dp),
                                 gradient = GradientColor.incomeGradient,
                                 amount = "₹5,000",
-                                onClick = { /* Navigate */ }
+                                onClick = onAddIncomeClicked
                             )
                         }
                         Row(modifier = Modifier.fillMaxWidth()) {
@@ -142,7 +142,7 @@ fun HomeScreen(
                                     .padding(8.dp),
                                 gradient = GradientColor.loanGradient,
                                 amount = "₹15,000",
-                                onClick = { /* Navigate */ }
+                                onClick = onAddLoanClicked
                             )
                             CategoryCard(
                                 title = "Investment",
@@ -151,7 +151,7 @@ fun HomeScreen(
                                     .padding(8.dp),
                                 gradient = GradientColor.investmentGradient,
                                 amount = "₹9,000",
-                                onClick = { /* Navigate */ }
+                                onClick = onAddInvestmentClicked
                             )
                         }
 

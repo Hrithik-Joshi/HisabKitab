@@ -12,5 +12,5 @@ import com.hrithik.hisabkitab.data.entity.TransactionEntity
 )
 abstract class TransactionDatabase : RoomDatabase() {
 
-    abstract val dao: TransactionDao
+    abstract fun transactionDao(): TransactionDao
 }

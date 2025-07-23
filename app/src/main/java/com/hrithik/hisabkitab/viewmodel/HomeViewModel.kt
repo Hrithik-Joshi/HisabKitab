@@ -15,7 +15,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val transactionRepository: TransactionRepository,
     private val dataStorageManager: DataStorageManager
 ) : ViewModel() {
 

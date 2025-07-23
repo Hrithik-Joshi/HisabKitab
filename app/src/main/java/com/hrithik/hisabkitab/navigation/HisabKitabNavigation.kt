@@ -6,6 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hrithik.hisabkitab.ui.compose.AddExpenseScreen
+import com.hrithik.hisabkitab.ui.compose.AddIncomeScreen
+import com.hrithik.hisabkitab.ui.compose.AddInvestmentScreen
+import com.hrithik.hisabkitab.ui.compose.AddLoanScreen
 import com.hrithik.hisabkitab.ui.compose.HomeScreen
 import com.hrithik.hisabkitab.ui.compose.LoginScreen
 import com.hrithik.hisabkitab.ui.compose.SignUpScreen
@@ -66,9 +69,19 @@ fun HisabKitabNavigation(
                 },
                 onAddExpenseClicked = {
                     navController.navigate(NavigationItem.AddExpense.route)
+                },
+                onAddIncomeClicked = {
+                    navController.navigate(NavigationItem.AddIncome.route)
+                },
+                onAddInvestmentClicked = {
+                    navController.navigate(NavigationItem.AddInvestment.route)
+                },
+                onAddLoanClicked = {
+                    navController.navigate(NavigationItem.AddLoan.route)
                 }
             )
         }
+
 
         composable(NavigationItem.AddExpense.route) {
             AddExpenseScreen(onBackClick = {
@@ -77,5 +90,30 @@ fun HisabKitabNavigation(
                 )
             })
         }
+
+        composable(NavigationItem.AddIncome.route) {
+            AddIncomeScreen(onBackClick = {
+                navController.navigate(
+                    NavigationItem.Home.route
+                )
+            })
+        }
+
+        composable(NavigationItem.AddInvestment.route) {
+            AddInvestmentScreen(onBackClick = {
+                navController.navigate(
+                    NavigationItem.Home.route
+                )
+            })
+        }
+
+        composable(NavigationItem.AddLoan.route) {
+            AddLoanScreen(onBackClick = {
+                navController.navigate(
+                    NavigationItem.Home.route
+                )
+            })
+        }
     }
+
 }

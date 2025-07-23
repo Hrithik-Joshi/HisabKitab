@@ -9,5 +9,8 @@ sealed class NavigationItem(val route: String) {
     object Home : NavigationItem("home")
 
     object AddExpense : NavigationItem("addExpense")
+    object AddIncome : NavigationItem("addIncome")
+    object AddInvestment : NavigationItem("addInvestment")
+    object AddLoan : NavigationItem("addLoan")
 
 }
