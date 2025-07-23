@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hrithik.hisabkitab.data.dataStore.DataStorageManager
 import com.hrithik.hisabkitab.data.repository.AuthRepository
+import com.hrithik.hisabkitab.data.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: AuthRepository,
+    private val transactionRepository: TransactionRepository,
     private val dataStorageManager: DataStorageManager
 ) : ViewModel() {
 
