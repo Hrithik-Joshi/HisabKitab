@@ -15,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val dataStorageManager: DataStorageManager
+    private val dataStorageManager: DataStorageManager,
+    private val transactionRepository: TransactionRepository
 ) : ViewModel() {
 
     private val _showBottomSheet = MutableStateFlow(false)
