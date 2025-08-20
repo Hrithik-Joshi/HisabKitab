@@ -6,7 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.hrithik.hisabkitab.navigation.HisabKitabNavigation
@@ -28,7 +31,7 @@ class MainActivity : ComponentActivity() {
 
             setContent {
                 HisabKitabTheme {
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)) {
                         HisabKitabNavigation(
                             startDestination = if (isLoggedIn) NavigationItem.Home.route else NavigationItem.Login.route
                         )
