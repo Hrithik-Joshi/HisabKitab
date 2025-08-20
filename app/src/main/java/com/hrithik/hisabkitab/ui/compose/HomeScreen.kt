@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hrithik.hisabkitab.R
 import com.hrithik.hisabkitab.ui.theme.HisabKitabTheme
-import com.hrithik.hisabkitab.ui.theme.interstate_blue_600
+import com.hrithik.hisabkitab.ui.theme.interstate_blue_700
 import com.hrithik.hisabkitab.ui.theme.interstate_white
 import com.hrithik.hisabkitab.viewmodel.HomeViewModel
 
@@ -69,7 +69,7 @@ fun HomeScreen(
                 TopAppBar(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    colors = TopAppBarDefaults.topAppBarColors(interstate_blue_600),
+                    colors = TopAppBarDefaults.topAppBarColors(interstate_blue_700),
                     title = {
                         Text(
                             text = "Hisab Kitab",

@@ -18,7 +18,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -47,17 +46,15 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hrithik.hisabkitab.R
-import com.hrithik.hisabkitab.ui.theme.interstate_blue_600
 import com.hrithik.hisabkitab.ui.theme.interstate_blue_700
 import com.hrithik.hisabkitab.ui.theme.interstate_white
 import com.hrithik.hisabkitab.ui.theme.text_grey
-import java.util.Calendar
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,7 +66,7 @@ fun MainTopBar(
     TopAppBar(
         modifier = Modifier
             .fillMaxWidth(),
-        colors = TopAppBarDefaults.topAppBarColors(interstate_blue_600),
+        colors = TopAppBarDefaults.topAppBarColors(interstate_blue_700),
         title = {
             Text(
                 text = title,
