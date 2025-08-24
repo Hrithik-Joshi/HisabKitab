@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface TransactionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTransaction(transaction: TransactionEntity)
+    suspend fun saveTransaction(transaction: TransactionEntity)
 
     @Query("SELECT * FROM TransactionTable ORDER BY date DESC")
     fun getAllTransactions(): Flow<List<TransactionEntity>>

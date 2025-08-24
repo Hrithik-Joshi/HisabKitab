@@ -39,6 +39,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -53,6 +54,7 @@ import com.hrithik.hisabkitab.R
 import com.hrithik.hisabkitab.ui.theme.interstate_blue_700
 import com.hrithik.hisabkitab.ui.theme.interstate_white
 import com.hrithik.hisabkitab.ui.theme.text_grey
+import com.hrithik.hisabkitab.viewmodel.AddExpenseViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -91,7 +93,7 @@ fun MainTopBar(
 }
 
 @Composable
-fun MainBottomBar(isEnabled: Boolean = true, onSaveClick: () -> Unit = {}){
+fun MainBottomBar(isEnabled: Boolean = true, onSaveClick: () -> Unit = {}) {
     Box(modifier = Modifier.background(interstate_white)) {
         HorizontalDivider()
         Button(
@@ -119,18 +121,23 @@ fun MainBottomBar(isEnabled: Boolean = true, onSaveClick: () -> Unit = {}){
 }
 
 @Composable
-fun AddTransactionContent(categories: Map<String, List<String>>, paymentMode: List<String>, onValidationChange: (Boolean) -> Unit = {}) {
-    var amount by remember { mutableStateOf("") }
-    var note by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("") }
-    var selectedSubCategory by remember { mutableStateOf("") }
-    var selectedPaymentMode by remember { mutableStateOf("") }
-    var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
+fun AddTransactionContent(
+    categories: Map<String, List<String>>,
+    paymentMode: List<String>,
+    onValidationChange: (Boolean) -> Unit = {},
+    updateAmount: (String) -> Unit = {},
+    updateCategory: (String) -> Unit = {},
+    updateSubCategory: (String) -> Unit = {},
+    updatePaymentMode: (String) -> Unit = {},
+    updateNote: (String) -> Unit = {},
+    updateDate: (Calendar) -> Unit = {},
+    data: AddExpenseViewModel.TransactionData,
+) {
 
     // Validation logic - check if required fields are filled
-    val isFormValid = amount.isNotBlank() &&
-            selectedCategory.isNotBlank() &&
-            selectedPaymentMode.isNotBlank()
+    val isFormValid = data.amount.isNotBlank() &&
+            data.category.isNotBlank() &&
+            data.paymentMode.isNotBlank()
 
     // Notify parent about validation state changes
     remember(isFormValid) {
@@ -139,15 +146,15 @@ fun AddTransactionContent(categories: Map<String, List<String>>, paymentMode: Li
     }
 
     val expenseCategories = categories.keys.toList()
-    val currentSubCategories = if (selectedCategory.isNotEmpty()) {
-        categories[selectedCategory] ?: emptyList()
+    val currentSubCategories = if (data.category.isNotEmpty()) {
+        categories[data.category] ?: emptyList()
     } else {
         emptyList()
     }
 
     // Reset subcategory when main category changes
-    if (selectedCategory.isNotEmpty() && !currentSubCategories.contains(selectedSubCategory)) {
-        selectedSubCategory = ""
+    if (data.category.isNotEmpty() && !currentSubCategories.contains(data.subCategory)) {
+        updateSubCategory("")
     }
 
     val focusManager = LocalFocusManager.current
@@ -155,80 +162,50 @@ fun AddTransactionContent(categories: Map<String, List<String>>, paymentMode: Li
     Column(
         modifier = Modifier
             .fillMaxSize()
-
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             AddExpenseAmountCard(
-                amount = amount,
-                onAmountChange = { amount = it }
+                amount = data.amount,
+                onAmountChange = { updateAmount(it) }
             )
         }
         Column(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier.padding(8.dp)) {
                 CategoryDropdown(
                     label = "Category",
-                    items = expenseCategories,
-                    selectedItem = selectedCategory,
-                    onItemSelected = { selectedCategory = it }
+                    categories = expenseCategories,
+                    selectedCategory = data.category,
+                    onCategorySelected = { updateCategory(it) }
+                )
+            }
+            if (currentSubCategories.isNotEmpty()) {
+                Row(modifier = Modifier.padding(8.dp)) {
+                    CategoryDropdown(
+                        label = "Subcategory",
+                        categories = currentSubCategories,
+                        selectedCategory = data.subCategory,
+                        onCategorySelected = { updateSubCategory(it) }
+                    )
+                }
+            }
+            Row(modifier = Modifier.padding(8.dp)) {
+                PaymentModeDropdown(
+                    paymentModes = paymentMode,
+                    selectedPaymentMode = data.paymentMode,
+                    onPaymentModeSelected = { updatePaymentMode(it) }
                 )
             }
             Row(modifier = Modifier.padding(8.dp)) {
-                SubCategoryDropdown(
-                    label = "Subcategory",
-                    items = currentSubCategories,
-                    selectedItem = selectedSubCategory,
-                    onItemSelected = { selectedSubCategory = it },
-                    enabled = selectedCategory.isNotEmpty()
+                NoteTextField(
+                    note = data.note,
+                    onNoteChange = { updateNote(it) },
+                    focusManager = focusManager
                 )
             }
             Row(modifier = Modifier.padding(8.dp)) {
-                CategoryDropdown(
-                    label = "Payment Mode",
-                    items = paymentMode,
-                    selectedItem = selectedPaymentMode,
-                    onItemSelected = { selectedPaymentMode = it }
-                )
-            }
-            Row(modifier = Modifier.padding(8.dp)) {
-                DateSelectionField(
-                    selectedDate = selectedDate,
-                    onDateSelected = { selectedDate = it }
-                )
-            }
-            Row(modifier = Modifier.padding(8.dp)) {
-                OutlinedTextField(
-                    value = note,
-                    onValueChange = { note = it },
-                    label = { Text("Note",
-                        color = text_grey) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Normal,
-                        color = interstate_blue_700
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(onDone = {
-                        focusManager.clearFocus()
-                    }),
-                    maxLines = 4,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.outline,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                    shape = RoundedCornerShape(12.dp),
-                    placeholder = {
-                        Text(
-                            text = "Add any additional notes here",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
+                DatePickerField(
+                    selectedDate = data.date,
+                    onDateSelected = { updateDate(it) }
                 )
             }
         }
@@ -239,9 +216,9 @@ fun AddTransactionContent(categories: Map<String, List<String>>, paymentMode: Li
 @Composable
 fun CategoryDropdown(
     label: String,
-    items: List<String>,
-    selectedItem: String,
-    onItemSelected: (String) -> Unit
+    categories: List<String>,
+    selectedCategory: String,
+    onCategorySelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -251,7 +228,7 @@ fun CategoryDropdown(
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = selectedItem,
+            value = selectedCategory,
             onValueChange = {},
             readOnly = true,
             label = {
@@ -289,7 +266,7 @@ fun CategoryDropdown(
             onDismissRequest = { expanded = false },
             containerColor = interstate_white
         ) {
-            items.forEach { selectionOption ->
+            categories.forEach { selectionOption ->
                 DropdownMenuItem(
                     text = {
                         Text(
@@ -298,7 +275,7 @@ fun CategoryDropdown(
                         )
                     },
                     onClick = {
-                        onItemSelected(selectionOption)
+                        onCategorySelected(selectionOption)
                         expanded = false
                     }
                 )
@@ -309,28 +286,25 @@ fun CategoryDropdown(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubCategoryDropdown(
-    label: String,
-    items: List<String>,
-    selectedItem: String,
-    onItemSelected: (String) -> Unit,
-    enabled: Boolean = true
+fun PaymentModeDropdown(
+    paymentModes: List<String>,
+    selectedPaymentMode: String,
+    onPaymentModeSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-
-        ) {
+        onExpandedChange = { expanded = !expanded }
+    ) {
         OutlinedTextField(
-            value = selectedItem,
+            value = selectedPaymentMode,
             onValueChange = {},
             readOnly = true,
             label = {
                 Text(
-                    label,
+                    "Payment Mode",
                     color = text_grey
                 )
             },
@@ -363,16 +337,16 @@ fun SubCategoryDropdown(
             onDismissRequest = { expanded = false },
             containerColor = interstate_white
         ) {
-            items.forEach { selectionOption ->
+            paymentModes.forEach { mode ->
                 DropdownMenuItem(
                     text = {
                         Text(
-                            selectionOption,
+                            mode,
                             color = Color.Black
                         )
                     },
                     onClick = {
-                        onItemSelected(selectionOption)
+                        onPaymentModeSelected(mode)
                         expanded = false
                     }
                 )
@@ -383,7 +357,53 @@ fun SubCategoryDropdown(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateSelectionField(
+fun NoteTextField(
+    note: String,
+    onNoteChange: (String) -> Unit,
+    focusManager: FocusManager
+) {
+    OutlinedTextField(
+        value = note,
+        onValueChange = onNoteChange,
+        label = {
+            Text(
+                "Note",
+                color = text_grey
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        textStyle = MaterialTheme.typography.bodyLarge.copy(
+            fontWeight = FontWeight.Normal,
+            color = interstate_blue_700
+        ),
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(onDone = {
+            focusManager.clearFocus()
+        }),
+        maxLines = 4,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.outline,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        shape = RoundedCornerShape(12.dp),
+        placeholder = {
+            Text(
+                text = "Add any additional notes here",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerField(
     selectedDate: Calendar,
     onDateSelected: (Calendar) -> Unit
 ) {

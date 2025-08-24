@@ -16,7 +16,7 @@ data class TransactionEntity(
     val id: Int = 0,
 
     @SerialName("type")
-    val type: String,   // Expense, Income, Loan, Investment
+    val type: String?,   // Expense, Income, Loan, Investment
 
     @SerialName("category")
     val category: String,
