@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,23 +15,24 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hrithik.hisabkitab.ui.theme.HisabKitabTheme
 import com.hrithik.hisabkitab.ui.theme.interstate_white
-import com.hrithik.hisabkitab.util.ExpenseCategories.Companion.expenseCategoriesWithSubcategories
 import com.hrithik.hisabkitab.util.ExpenseCategories.Companion.paymentModes
+import com.hrithik.hisabkitab.util.IncomeCategories.Companion.incomeCategoriesWithSubcategories
 import com.hrithik.hisabkitab.viewmodel.AddExpenseViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddExpenseScreen(onBackClick: () -> Unit) {
-    var isFormValid by remember { mutableStateOf(false) }
+fun AddIncomeScreen(
+    onBackClick: () -> Unit
+) {
     val viewModel: AddExpenseViewModel = hiltViewModel()
     val uiState by viewModel.transactionUIState.collectAsState()
     val data = uiState.transactionData
+    var isFormValid by remember { mutableStateOf(false) }
     HisabKitabTheme {
         Scaffold(
             topBar = {
                 MainTopBar(
                     onBackClick = onBackClick,
-                    title = "Add Expense",
+                    title = "Add Income",
                 )
             },
             content = { paddingValues ->
@@ -43,9 +43,8 @@ fun AddExpenseScreen(onBackClick: () -> Unit) {
                         .background(interstate_white)
                 ) {
                     AddTransactionContent(
-                        categories = expenseCategoriesWithSubcategories,
-                        paymentMode = paymentModes,
-                        onValidationChange = { isFormValid = it },
+                        categories = incomeCategoriesWithSubcategories,
+                        paymentMode = paymentModes, onValidationChange = { isFormValid = it },
                         updateAmount = { viewModel.updateAmount(it) },
                         updateCategory = { viewModel.updateCategory(it) },
                         updateSubCategory = { viewModel.updateSubCategory(it) },
@@ -60,8 +59,7 @@ fun AddExpenseScreen(onBackClick: () -> Unit) {
             bottomBar = {
                 MainBottomBar(
                     isEnabled = isFormValid,
-                    onSaveClick = { viewModel.saveExpense(type = "General Expense") }
-                )
+                    onSaveClick = { viewModel.saveExpense(type = "Income Expense") })
             }
         )
     }

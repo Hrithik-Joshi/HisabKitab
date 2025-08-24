@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "1.7.0"
 
 }
 
@@ -75,6 +76,12 @@ dependencies {
     implementation(libs.android.datastore)
     implementation(libs.touchlab.settings.coroutines)
     implementation(libs.bundles.touchlab.common)
+
+    //For room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
 
     //firebase
     implementation(platform(libs.firebase.bom))
