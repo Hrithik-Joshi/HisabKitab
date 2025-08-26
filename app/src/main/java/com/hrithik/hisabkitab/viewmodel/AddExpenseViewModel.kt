@@ -2,13 +2,13 @@ package com.hrithik.hisabkitab.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hrithik.hisabkitab.data.dao.TransactionDao
+import com.hrithik.hisabkitab.data.entity.TransactionEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import com.hrithik.hisabkitab.data.dao.TransactionDao
-import com.hrithik.hisabkitab.data.entity.TransactionEntity
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -18,6 +18,14 @@ import java.util.Locale
 class AddExpenseViewModel @Inject constructor(
     private val transactionDao: TransactionDao
 ) : ViewModel() {
+
+    enum class SaveExpenseModelState {
+        INIT,
+        IN_PROGRESS,
+        COMPLETED,
+        ERROR
+    }
+
     data class TransactionData(
         val amount: String = "",
         val note: String = "",
@@ -28,13 +36,17 @@ class AddExpenseViewModel @Inject constructor(
     )
 
     data class TransactionUIState(
-        val transactionData: TransactionData = TransactionData()
+        val transactionData: TransactionData = TransactionData(),
+        val saveExpenseModelState: SaveExpenseModelState = SaveExpenseModelState.INIT
     )
 
     private val _transactionUIState = MutableStateFlow(TransactionUIState())
     val transactionUIState: StateFlow<TransactionUIState> = _transactionUIState.asStateFlow()
 
     fun saveExpense(type: String?) {
+        _transactionUIState.value = _transactionUIState.value.copy(
+            saveExpenseModelState = SaveExpenseModelState.IN_PROGRESS
+        )
         val data = _transactionUIState.value.transactionData
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         val entity = TransactionEntity(
@@ -43,10 +55,21 @@ class AddExpenseViewModel @Inject constructor(
             subCategory = data.subCategory,
             amount = data.amount.toDoubleOrNull() ?: 0.0,
             date = dateFormat.format(data.date.time),
+            paymentMode = data.paymentMode,
             note = data.note
         )
         viewModelScope.launch {
-            transactionDao.saveTransaction(entity)
+            try {
+                transactionDao.saveTransaction(entity)
+            } catch (e: Exception) {
+                _transactionUIState.value = _transactionUIState.value.copy(
+                    saveExpenseModelState = SaveExpenseModelState.ERROR
+                )
+                return@launch
+            }
+            _transactionUIState.value = _transactionUIState.value.copy(
+                saveExpenseModelState = SaveExpenseModelState.COMPLETED
+            )
         }
     }
 
@@ -64,7 +87,10 @@ class AddExpenseViewModel @Inject constructor(
 
     fun updateCategory(category: String) {
         _transactionUIState.value = _transactionUIState.value.copy(
-            transactionData = _transactionUIState.value.transactionData.copy(category = category, subCategory = "")
+            transactionData = _transactionUIState.value.transactionData.copy(
+                category = category,
+                subCategory = ""
+            )
         )
     }
 

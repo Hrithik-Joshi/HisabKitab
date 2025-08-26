@@ -27,6 +27,9 @@ data class TransactionEntity(
     @SerialName("amount")
     val amount: Double,
 
+    @SerialName("paymentMode")
+    val paymentMode: String,
+
     @SerialName("date")
     val date: String,  // ISO 8601 format (e.g., "2023-10-01T12:00:00Z")
 
