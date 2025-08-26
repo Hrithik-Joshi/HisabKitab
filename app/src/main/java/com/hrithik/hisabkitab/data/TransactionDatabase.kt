@@ -8,7 +8,8 @@ import com.hrithik.hisabkitab.data.entity.TransactionEntity
 
 @Database(
     entities = [TransactionEntity::class],
-    version = 1
+    version = 2,
+    exportSchema = false
 )
 abstract class TransactionDatabase : RoomDatabase() {
 

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -35,10 +36,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.hrithik.hisabkitab.ui.compose.GradientColor.Companion.expenseAdd
 import com.hrithik.hisabkitab.ui.theme.text_charcoal
 import com.hrithik.hisabkitab.ui.theme.text_grey
+import com.hrithik.hisabkitab.viewmodel.AddExpenseViewModel
 
 @Composable
 fun ErrorDialog(
@@ -209,5 +212,41 @@ fun AddExpenseAmountCard(
             )
 
         }
+    }
+}
+
+@Composable
+fun SaveExpenseView(
+    saveExpenseViewModelState: AddExpenseViewModel.SaveExpenseModelState,
+    onSaved: () -> Unit
+) {
+    when(saveExpenseViewModelState){
+        AddExpenseViewModel.SaveExpenseModelState.COMPLETED -> {
+            onSaved()
+        }
+        AddExpenseViewModel.SaveExpenseModelState.IN_PROGRESS -> {
+            NonDismissableDialog()
+        }
+        AddExpenseViewModel.SaveExpenseModelState.ERROR -> {
+            ErrorDialog(
+                title = "Error",
+                message = "Failed to save expense. Please try again.",
+                onDismiss = onSaved
+            )
+        }
+        else -> {}
+    }
+}
+
+@Composable
+fun NonDismissableDialog() {
+    Dialog(
+        onDismissRequest = {},
+        properties = DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
+        )
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 }

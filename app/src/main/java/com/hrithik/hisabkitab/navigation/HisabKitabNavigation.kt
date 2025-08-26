@@ -84,11 +84,18 @@ fun HisabKitabNavigation(
 
 
         composable(NavigationItem.AddExpense.route) {
-            AddExpenseScreen(onBackClick = {
-                navController.navigate(
-                    NavigationItem.Home.route
-                )
-            })
+            AddExpenseScreen(
+                onBackClick = {
+                    navController.navigate(
+                        NavigationItem.Home.route
+                    )
+                },
+                onExpenseSaved = {
+                    navController.navigate(
+                        NavigationItem.Home.route
+                    )
+                }
+            )
         }
 
         composable(NavigationItem.AddIncome.route) {

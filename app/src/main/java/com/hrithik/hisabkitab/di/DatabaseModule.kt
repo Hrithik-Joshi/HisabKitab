@@ -22,7 +22,9 @@ object DatabaseModule {
             app,
             TransactionDatabase::class.java,
             "TransactionDatabase"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(true)
+        .build()
     }
 
     @Provides

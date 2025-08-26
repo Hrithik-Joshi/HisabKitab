@@ -22,7 +22,8 @@ import com.hrithik.hisabkitab.viewmodel.AddExpenseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddExpenseScreen(onBackClick: () -> Unit) {
+fun AddExpenseScreen(onBackClick: () -> Unit,
+                     onExpenseSaved: () -> Unit) {
     var isFormValid by remember { mutableStateOf(false) }
     val viewModel: AddExpenseViewModel = hiltViewModel()
     val uiState by viewModel.transactionUIState.collectAsState()
@@ -42,6 +43,12 @@ fun AddExpenseScreen(onBackClick: () -> Unit) {
                         .fillMaxSize()
                         .background(interstate_white)
                 ) {
+                    SaveExpenseView(
+                        saveExpenseViewModelState = uiState.saveExpenseModelState,
+                        onSaved = {
+                            onExpenseSaved()
+                        })
+
                     AddTransactionContent(
                         categories = expenseCategoriesWithSubcategories,
                         paymentMode = paymentModes,
